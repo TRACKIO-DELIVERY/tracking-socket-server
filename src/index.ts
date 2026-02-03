@@ -1,9 +1,11 @@
 import { createServer } from "http";
 import { Server } from "socket.io";
+import { registerSocketHandlers } from "./socket/handler";
 
 const httpServer = createServer();
 
 const io = new Server(httpServer, {
+  path: "/track/socket.io",
   cors: {
     origin: "*",
   },
@@ -11,7 +13,7 @@ const io = new Server(httpServer, {
 
 io.on("connection", (socket) => {
   console.log("Novo socket:", socket.id);
-  //registrar handlers
+  registerSocketHandlers(io, socket);
 });
 
 httpServer.listen(3333, () => {
