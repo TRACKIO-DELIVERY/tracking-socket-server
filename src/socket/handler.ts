@@ -22,4 +22,11 @@ export function registerSocketHandlers(io: Server, socket: Socket) {
   socket.on("disconnect", () => {
     console.log("Socket desconectado:", socket.id);
   });
+
+  socket.on("order_delivered", (orderId: number) => {
+    io.to(`order:${orderId}`).emit("order_finished", { orderId });
+
+    socket.leave(`order:${orderId}`);
+    console.log(`Pedido ${orderId} finalizado e sala fechada.`);
+  });
 }
